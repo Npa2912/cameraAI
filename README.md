@@ -4,7 +4,7 @@ CamHome là ứng dụng Android thử nghiệm cho camera gia đình. Giao di�
 
 ## Chạy trên Android
 
-Cần Node.js 20.19.4 trở lên, JDK 17, Android SDK Platform 36, Build Tools 36.0.0, Platform Tools, NDK 27.1.12297006 và CMake 3.22.1. Thiết lập `ANDROID_HOME` trỏ tới SDK. Mở emulator Android hoặc bật USB debugging trên thiết bị rồi kiểm tra bằng `adb devices`. Nên dùng điện thoại thật để quét mã trên thân camera.
+Cần Node.js 20.19.4 trở lên, JDK 17, Android SDK Platform 36, Build Tools 35.0.0 và 36.0.0, Platform Tools, NDK 27.1.12297006 và CMake 3.22.1. Thiết lập `ANDROID_HOME` trỏ tới SDK. Mở emulator Android hoặc bật USB debugging trên thiết bị rồi kiểm tra bằng `adb devices`. Nên dùng điện thoại thật để quét mã trên thân camera.
 
 ```sh
 npm ci

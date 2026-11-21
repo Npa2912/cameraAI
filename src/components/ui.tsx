@@ -22,7 +22,15 @@ export function Glyph({
   size?: number;
   color?: string;
 }) {
-  return <Ionicons name={name} size={size} color={color} />;
+  return (
+    <Ionicons
+      name={name}
+      size={size}
+      color={color}
+      accessible={false}
+      importantForAccessibility="no"
+    />
+  );
 }
 
 export function Card({ children }: { children: ReactNode }) {
@@ -43,6 +51,7 @@ export function Button({
   return (
     <Pressable
       accessibilityRole="button"
+      accessibilityLabel={label}
       onPress={onPress}
       style={({ pressed }) => [
         styles.button,

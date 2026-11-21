@@ -248,6 +248,7 @@ function CamHome() {
             <Pressable
               key={tab.route}
               accessibilityRole="tab"
+              accessibilityLabel={tab.label}
               accessibilityState={{ selected: route === tab.route }}
               onPress={() => setRoute(tab.route)}
               style={layout.tab}

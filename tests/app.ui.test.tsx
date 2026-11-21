@@ -5,8 +5,9 @@ import {
   screen,
   waitFor,
 } from "@testing-library/react-native";
-import { Alert } from "react-native";
+import { Alert, BackHandler } from "react-native";
 import App from "../src/App";
+import { adapter } from "../src/adapters/UnverifiedAdapter";
 import { loadDevices, saveDevices } from "../src/storage/devices";
 
 jest.mock("expo-camera", () => ({
@@ -84,4 +85,29 @@ test("events and storage stay empty without camera data", async () => {
   expect(screen.getByText("Chưa có sự kiện")).toBeTruthy();
   fireEvent.press(screen.getByRole("tab", { name: "Lưu trữ" }));
   expect(screen.getByText("Chưa có bản ghi")).toBeTruthy();
+});
+
+test("Android Back leaves Live View and releases the adapter session", async () => {
+  jest
+    .mocked(loadDevices)
+    .mockResolvedValue([{ id: "fixture", name: "Hồ sơ kiểm thử" }]);
+  let handleBack: (() => boolean | null | undefined) | undefined;
+  const listener = jest
+    .spyOn(BackHandler, "addEventListener")
+    .mockImplementation((_name, handler) => {
+      handleBack = handler;
+      return { remove: jest.fn() };
+    });
+  const disconnect = jest.spyOn(adapter, "disconnect");
+  try {
+    render(<App />);
+    fireEvent.press(await screen.findByText("Hồ sơ kiểm thử"));
+    await screen.findByText("Chưa có video trực tiếp");
+    act(() => expect(handleBack?.()).toBe(true));
+    expect(await screen.findByText("CamHome")).toBeTruthy();
+    expect(disconnect).toHaveBeenCalledTimes(1);
+  } finally {
+    listener.mockRestore();
+    disconnect.mockRestore();
+  }
 });
