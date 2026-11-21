@@ -143,7 +143,7 @@ export function AddCamera({
         <TextInput
           accessibilityLabel="Địa chỉ IPv4"
           style={styles.input}
-          keyboardType="decimal-pad"
+          keyboardType="default"
           autoCorrect={false}
           autoCapitalize="none"
           value={address}

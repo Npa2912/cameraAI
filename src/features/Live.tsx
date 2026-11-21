@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
 import type { Camera } from "../adapters/CameraAdapter";
 import { Button, Empty, colors, styles } from "../components/ui";
 import { useConnection } from "../hooks/useConnection";
@@ -78,9 +78,6 @@ export function Library({
           detail="Dữ liệu sẽ xuất hiện khi có camera tương thích cung cấp dữ liệu."
         />
       </View>
-      <Text style={styles.description}>
-        Dung lượng thẻ nhớ chỉ hiển thị khi camera cung cấp thông tin.
-      </Text>
     </>
   );
 }
