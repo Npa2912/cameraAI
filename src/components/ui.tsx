@@ -4,13 +4,17 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 
 export type Icon = ComponentProps<typeof Ionicons>["name"];
 export const colors = {
-  background: "#ECF2FE",
-  panel: "#F7F9FF",
+  background: "#F5F5FF",
+  panel: "#FAFAFF",
   white: "#FFFFFF",
-  ink: "#101A40",
-  muted: "#4B6087",
-  blue: "#0876F9",
-  line: "#D9E4F8",
+  ink: "#171B36",
+  muted: "#616782",
+  blue: "#6554EA",
+  line: "#DFDCF5",
+  lavender: "#7364F5",
+  success: "#168455",
+  danger: "#CA375E",
+  dark: "#20242C",
 };
 
 export function Glyph({
@@ -42,21 +46,26 @@ export function Button({
   icon,
   onPress,
   primary = false,
+  disabled = false,
 }: {
   label: string;
   icon?: Icon;
   onPress: () => void;
   primary?: boolean;
+  disabled?: boolean;
 }) {
   return (
     <Pressable
       accessibilityRole="button"
       accessibilityLabel={label}
       onPress={onPress}
+      disabled={disabled}
+      accessibilityState={{ disabled }}
       style={({ pressed }) => [
         styles.button,
         primary && styles.primary,
         pressed && styles.pressed,
+        disabled && { opacity: 0.5 },
       ]}
     >
       {icon && (
@@ -121,13 +130,13 @@ export function Empty({
 }
 
 export const styles = StyleSheet.create({
-  page: { padding: 16, gap: 16, flexGrow: 1 },
+  page: { padding: 16, gap: 14, flexGrow: 1 },
   header: { flexDirection: "row", alignItems: "center", gap: 12 },
   flex: { flex: 1 },
   row: { flexDirection: "row", alignItems: "center", gap: 12 },
   heading: {
     color: colors.ink,
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: "800",
     letterSpacing: -0.8,
   },
@@ -137,16 +146,16 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.panel,
     padding: 16,
     gap: 12,
-    borderRadius: 24,
+    borderRadius: 18,
     borderWidth: 1,
     borderColor: colors.white,
-    elevation: 3,
-    shadowColor: "#4369AA",
+    elevation: 2,
+    shadowColor: "#51438B",
   },
   button: {
     minHeight: 48,
     borderRadius: 16,
-    backgroundColor: "#E8F0FF",
+    backgroundColor: "#EEEBFF",
     paddingHorizontal: 12,
     paddingVertical: 10,
     flexDirection: "row",
@@ -178,7 +187,7 @@ export const styles = StyleSheet.create({
     gap: 8,
   },
   symbol: {
-    backgroundColor: "#E1EDFF",
+    backgroundColor: "#E8E3FF",
     width: 64,
     height: 64,
     borderRadius: 20,

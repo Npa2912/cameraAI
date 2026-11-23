@@ -8,8 +8,16 @@ import {
 import { Alert, BackHandler } from "react-native";
 import App from "../src/App";
 import { adapter } from "../src/adapters/UnverifiedAdapter";
-import { loadDevices, saveDevices } from "../src/storage/devices";
+import {
+  loadBridge,
+  loadDevices,
+  saveBridge,
+  saveDevices,
+} from "../src/storage/devices";
 
+jest.mock("@react-native-async-storage/async-storage", () =>
+  jest.requireActual("@react-native-async-storage/async-storage/jest/async-storage-mock"),
+);
 jest.mock("expo-camera", () => ({
   CameraView: () => null,
   useCameraPermissions: () => [null, jest.fn()],
@@ -24,6 +32,9 @@ jest.mock("../src/storage/devices", () => ({
   saveDevices: jest.fn(),
   saveLabel: jest.fn(),
   removeLabel: jest.fn(),
+  loadBridge: jest.fn(),
+  saveBridge: jest.fn(),
+  removeBridge: jest.fn(),
 }));
 
 beforeEach(() => {
@@ -84,7 +95,11 @@ test("events and storage stay empty without camera data", async () => {
   fireEvent.press(screen.getByRole("tab", { name: "Sự kiện" }));
   expect(screen.getByText("Chưa có sự kiện")).toBeTruthy();
   fireEvent.press(screen.getByRole("tab", { name: "Lưu trữ" }));
-  expect(screen.getByText("Chưa có bản ghi")).toBeTruthy();
+  expect(screen.getByText("0 ảnh · 0 B")).toBeTruthy();
+  fireEvent.press(screen.getByText("Video đã lưu"));
+  expect(screen.getByText("Chưa có video đã ghi")).toBeTruthy();
+  fireEvent.press(screen.getByText("Thẻ nhớ"));
+  expect(screen.getByText("Chưa hỗ trợ xem thẻ nhớ qua TNP")).toBeTruthy();
 });
 
 test("Android Back leaves Live View and releases the adapter session", async () => {
@@ -110,4 +125,39 @@ test("Android Back leaves Live View and releases the adapter session", async () 
     listener.mockRestore();
     disconnect.mockRestore();
   }
+});
+
+test("stores the YIQ6 bridge access code separately from the device profile", async () => {
+  const camera = { id: "yi", name: "YIQ6", address: "192.168.50.31" };
+  const code = "a".repeat(32);
+  jest.mocked(loadDevices).mockResolvedValue([camera]);
+  jest.mocked(loadBridge).mockResolvedValue(null);
+  render(<App />);
+  fireEvent.press(await screen.findByText("YIQ6"));
+  fireEvent.press(screen.getByText("Cài đặt camera"));
+  fireEvent.changeText(
+    screen.getByLabelText("Địa chỉ bridge"),
+    "192.168.50.10:8765",
+  );
+  fireEvent.changeText(screen.getByLabelText("Mã truy cập bridge"), code);
+  fireEvent.press(screen.getByText("Lưu bridge YIQ6"));
+  await screen.findByText("Đã lưu cấu hình bridge.");
+  expect(saveBridge).toHaveBeenCalledWith("yi", code);
+  expect(saveDevices).toHaveBeenCalledWith([
+    { ...camera, model: "YIQ6", bridge: "192.168.50.10:8765" },
+  ]);
+});
+
+test("opens the camera grid and returns from the same Live View", async () => {
+  jest
+    .mocked(loadDevices)
+    .mockResolvedValue([{ id: "one", name: "Sân trước" }]);
+  render(<App />);
+  await screen.findByText("Sân trước");
+  fireEvent.press(screen.getByText("Nhiều camera"));
+  expect(screen.getByText("Thiết bị đã lưu")).toBeTruthy();
+  fireEvent.press(screen.getByRole("button", { name: "Mở Sân trước" }));
+  await screen.findByText("Chưa có video trực tiếp");
+  fireEvent.press(screen.getByRole("button", { name: "Quay lại" }));
+  expect(screen.getByText("Thiết bị đã lưu")).toBeTruthy();
 });

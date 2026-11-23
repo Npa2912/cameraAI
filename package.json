@@ -10,7 +10,8 @@
     "lint": "eslint .",
     "format:check": "prettier --check .",
     "test": "tsx --test tests/*.test.ts",
-    "test:ui": "jest --runInBand"
+    "test:ui": "jest --runInBand",
+    "ios": "expo run:ios"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.1.1",

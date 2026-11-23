@@ -18,6 +18,9 @@ export type Camera = {
   address?: string;
   model?: string;
   firmware?: string;
+  bridge?: string;
+  driver?: "yiq6-lan";
+  tnpUid?: string;
 };
 export type Recording = {
   id: string;

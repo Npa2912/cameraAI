@@ -1,5 +1,7 @@
 # CamHome
 
+Xem [CamHome Android k?t n?i tr?c ti?p YIQ6](docs/YIQ6_ANDROID.md) ?? build APK v? nghi?m thu qua Wi-Fi. [Windows bridge](docs/YIQ6_WINDOWS.md) l? c?ng c? ki?m th? ri?ng.
+
 CamHome là ứng dụng Android thử nghiệm cho camera gia đình. Giao diện tiếng Việt gồm Trang chủ, Live View, Sự kiện & Lưu trữ, Thêm camera và Cài đặt. Phiên bản này hỗ trợ quản lý hồ sơ camera cục bộ và đọc QR bằng camera điện thoại. Kết nối YIQ6 vẫn chờ xác minh.
 
 ## Chạy trên Android
@@ -31,4 +33,4 @@ npx expo export --platform android
 - [Kết quả kiểm thử](docs/TEST_REPORT.md)
 - [Giới hạn hiện tại](docs/KNOWN_LIMITATIONS.md)
 
-Ứng dụng hiện không cần biến môi trường. Dữ liệu camera được giữ trên điện thoại.
+CamHome lưu hồ sơ thiết bị trên điện thoại. Hồ sơ ghép nối YIQ6 và ảnh do bridge chụp được lưu trên máy Windows.
